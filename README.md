@@ -61,83 +61,176 @@ A collaborative real-time todo list application built with Angular, Node.js, Exp
 
 ## Setup Instructions
 
-1. Install dependencies:
-```bash
-# Install MongoDB
-# Start MongoDB service
-mongod
+# Real-time Todo List - Setup Guide
 
-# Install backend dependencies
-cd backend
-npm install
+## Prerequisites
 
-# Install frontend dependencies
-cd frontend
-npm install
+Before starting, make sure you have the following installed on your system:
+
+1. Node.js (v14.0.0 or higher)
+   ```bash
+   # To check Node.js version
+   node --version
+   ```
+
+2. npm (usually comes with Node.js)
+   ```bash
+   # To check npm version
+   npm --version
+   ```
+
+3. Angular CLI
+   ```bash
+   # Install Angular CLI globally
+   npm install -g @angular/cli
+
+   # Check Angular CLI version
+   ng version
+   ```
+
+## Project Setup
+
+1. Clone the repository
+   ```bash
+   git clone <repository-url>
+   cd real-time-todo
+   ```
+
+2. Backend Setup
+   ```bash
+   # Navigate to backend directory
+   cd backend
+
+   # Install dependencies
+   npm install
+
+   # Create .env file
+   echo "PORT=3000
+   MONGODB_URI=mongodb://localhost:27017/todolist
+   WS_PORT=8080" > .env
+
+   # Start MongoDB (in a new terminal)
+   mongod
+
+   # Start the backend server
+   npm start
+   ```
+
+3. Frontend Setup
+   ```bash
+   # Open a new terminal
+   # Navigate to frontend directory
+   cd frontend
+
+   # Install dependencies
+   npm install
+
+   # Start the Angular development server
+   ng serve
+   ```
+
+4. Access the application at `http://localhost:4200`
+
+## Development Environment Recommendations
+
+- IDE: VS Code with following extensions:
+  - Angular Language Service
+  - TypeScript Importer
+  - ESLint
+  - Prettier
+
+- Browser: Chrome with following extensions:
+  - Angular DevTools
+  - Redux DevTools
+
+## Project Structure
+```
+real-time-todo/
+├── backend/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   └── server.js
+│   ├── package.json
+│   └── .env
+│
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── components/
+│   │   │   ├── services/
+│   │   │   └── models/
+│   │   ├── assets/
+│   │   └── environments/
+│   ├── package.json
+│   └── angular.json
+│
+└── README.md
 ```
 
-2. Environment setup:
-```bash
-# Create .env file in backend directory
+## Environment Variables
+
+### Backend (.env)
+```env
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/todolist
 WS_PORT=8080
 ```
 
-3. Start the application:
-```bash
-# Start backend server
-cd backend
-npm start
-
-# Start frontend development server
-cd frontend
-ng serve
+### Frontend (environment.ts)
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000/api',
+  wsUrl: 'ws://localhost:8080'
+};
 ```
 
-4. Access the application at `http://localhost:4200`
+## Verification Steps
 
-## Code Structure
+After setup, verify the following:
 
-```
-src/
-├── app/
-│   ├── models/          # Data models
-│   ├── services/        # Business logic and data services
-│   ├── components/      # UI components
-│   ├── repositories/    # Data access layer
-│   └── utils/          # Helper functions and utilities
-├── assets/             # Static files
-└── environments/       # Environment configurations
-```
+1. Backend Status
+   ```bash
+   # Backend server should show:
+   Server running on port 3000
+   WebSocket server running on port 8080
+   MongoDB connected successfully
+   ```
 
-## Best Practices
+2. Frontend Status
+   ```bash
+   # Angular server should show:
+   √ Compiled successfully.
+   ```
 
-1. **Clean Code**
-   - Meaningful variable and function names
-   - Single responsibility principle
-   - DRY (Don't Repeat Yourself)
-   - SOLID principles
+3. Browser Console
+   - No error messages
+   - WebSocket connection established
 
-2. **Error Handling**
-   - Comprehensive error catching
-   - User-friendly error messages
-   - Logging for debugging
+4. Application Functionality
+   - Create a todo item
+   - Edit a todo item
+   - Delete a todo item
+   - Mark a todo as complete
+   - Verify real-time updates in multiple browser windows
 
-3. **Performance**
-   - OnPush change detection
-   - Proper unsubscription from observables
-   - Optimized WebSocket communication
+## Support
 
-4. **Security**
-   - Input validation
-   - XSS prevention
-   - CSRF protection
+If you encounter any issues not covered in this guide:
 
-## Contributing
+1. Check the project's issue tracker on GitHub
+2. Create a new issue with:
+   - Detailed description of the problem
+   - Steps to reproduce
+   - Environment information
+   - Error messages/screenshots
 
-Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
+## Additional Resources
 
-## License
+- [Angular Documentation](https://angular.io/docs)
+- [Node.js Documentation](https://nodejs.org/en/docs/)
+- [MongoDB Documentation](https://docs.mongodb.com/)
+- [WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
 
-This project is licensed under the MIT License - see the LICENSE.md file for details
