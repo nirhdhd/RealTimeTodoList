@@ -1,236 +1,194 @@
-# Real-time Todo List Application
+# Real-Time To-Do List Application
 
-A collaborative real-time todo list application built with Angular, Node.js, Express, and MongoDB. Features real-time updates and item locking mechanism to prevent concurrent edits.
+This is a real-time To-Do List application built with Angular (frontend) and Node.js/Express.js (backend) using MongoDB as the database, managed via Mongoose. It supports real-time updates across multiple clients using WebSockets, ensuring that changes (e.g., adding, editing, or deleting tasks) are instantly reflected for all connected users without a page refresh. The application uses Angular Material for a modern UI and includes an edit-locking mechanism to prevent concurrent edits on the same task.
 
 ## Features
 
-- Real-time synchronization between clients
-- Item locking system for collaborative editing
-- Material Design UI
-- Responsive layout
-- Automatic reconnection handling
-- Error notifications
-
-## Technology Stack
-
-### Frontend
-- Angular 17+
-- Angular Material
-- RxJS for reactive programming
-- WebSocket for real-time communication
-
-### Backend
-- Node.js
-- Express.js
-- MongoDB with Mongoose
-- Native WebSocket
-
-## Design Patterns Used
-
-### Frontend
-1. **Service Pattern**
-   - Separation of data management and UI logic
-   - WebSocket service for real-time communication
-   - Todo service for CRUD operations
-
-2. **Repository Pattern**
-   - Centralized data access layer
-   - Consistent interface for database operations
-
-3. **Observer Pattern**
-   - RxJS Observables for reactive programming
-   - Real-time updates handling
-
-4. **Singleton Pattern**
-   - Services are provided in root
-   - Single instance shared across the application
-
-### Backend
-1. **Repository Pattern**
-   - Abstraction of database operations
-   - Clean separation of concerns
-
-2. **Factory Pattern**
-   - WebSocket connection management
-   - Database connection handling
-
-3. **Middleware Pattern**
-   - Request processing pipeline
-   - Error handling
-   - Authentication/Authorization
-
-## Setup Instructions
-
-# Real-time Todo List - Setup Guide
+- Add a new task.
+- Edit an existing task (with edit locking).
+- Delete a task.
+- Mark a task as completed or incomplete.
+- Real-time synchronization across all connected clients.
+- Edit locking: Only one client can edit a task at a time, with proper lock release.
 
 ## Prerequisites
 
-Before starting, make sure you have the following installed on your system:
+- Node.js (v16.x or later recommended)
+- npm (v8.x or later recommended)
+- Angular CLI (v17.x or later recommended)
+- MongoDB (v4.x or later, running locally or via a service like MongoDB Atlas)
 
-1. Node.js (v14.0.0 or higher)
-   ```bash
-   # To check Node.js version
-   node --version
-   ```
+## Setup Instructions
 
-2. npm (usually comes with Node.js)
-   ```bash
-   # To check npm version
-   npm --version
-   ```
+### 1. Clone the Repository
 
-3. Angular CLI
-   ```bash
-   # Install Angular CLI globally
-   npm install -g @angular/cli
+```bash
+git clone <repository-url>
+cd todo-app
+```
 
-   # Check Angular CLI version
-   ng version
-   ```
+### 2. Set Up MongoDB
 
-## Project Setup
+#### Local MongoDB:
 
-1. Clone the repository
-   ```bash
-   git clone <repository-url>
-   cd real-time-todo
-   ```
+- Install MongoDB ([Installation Guide](https://www.mongodb.com/docs/manual/installation/)).
+- Start the MongoDB server:
 
-2. Backend Setup
-   ```bash
-   # Navigate to backend directory
-   cd backend
+```bash
+mongod
+```
 
-   # Install dependencies
-   npm install
+(Default port is 27017. Ensure it’s running.)
 
-   # Create .env file
-   echo "PORT=3000
-   MONGODB_URI=mongodb://localhost:27017/todolist
-   WS_PORT=8080" > .env
+#### MongoDB Atlas (optional):
 
-   # Start MongoDB (in a new terminal)
-   mongod
+- Create a free cluster at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+- Get your connection string (e.g., `mongodb+srv://<username>:<password>@cluster0.mongodb.net/todo_app?retryWrites=true&w=majority`).
 
-   # Start the backend server
-   npm start
-   ```
+### 3. Backend Setup
 
-3. Frontend Setup
-   ```bash
-   # Open a new terminal
-   # Navigate to frontend directory
-   cd frontend
+Navigate to the backend directory:
 
-   # Install dependencies
-   npm install
+```bash
+cd backend
+```
 
-   # Start the Angular development server
-   ng serve
-   ```
+Install dependencies:
 
-4. Access the application at `http://localhost:4200`
+```bash
+npm install
+```
 
-## Development Environment Recommendations
+Create a `.env` file in the backend directory:
 
-- IDE: VS Code with following extensions:
-  - Angular Language Service
-  - TypeScript Importer
-  - ESLint
-  - Prettier
+```
+PORT=3000
+MONGO_URI=mongodb://localhost:27017/todo_app
+```
 
-- Browser: Chrome with following extensions:
-  - Angular DevTools
-  - Redux DevTools
+Replace `MONGO_URI` with your MongoDB connection string if using Atlas.
+
+Start the backend server:
+
+```bash
+node server.js
+```
+
+The server will run on `http://localhost:3000` (or the port specified in `.env`).
+
+### 4. Frontend Setup
+
+Navigate to the frontend directory:
+
+```bash
+cd ../frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the Angular development server:
+
+```bash
+ng serve
+```
+
+The app will be available at `http://localhost:4200`.
+
+### 5. Test the Application
+
+- Open multiple browser windows or tabs to `http://localhost:4200`.
+- Add, edit, or delete tasks in one window and observe real-time updates in the others.
+- Edit a task in one client and verify:
+  - Only the selected task enters edit mode on the editing client.
+  - Other clients see only that task locked, and it unlocks after saving or canceling.
 
 ## Project Structure
+
 ```
-real-time-todo/
+todo-app/
 ├── backend/
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── models/
-│   │   ├── routes/
-│   │   └── server.js
-│   ├── package.json
-│   └── .env
-│
+│   ├── server.js         # Node.js/Express.js server with Socket.IO and Mongoose
+│   ├── .env              # Environment variables (not tracked in git)
+│   └── package.json      # Backend dependencies
 ├── frontend/
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── components/
-│   │   │   ├── services/
-│   │   │   └── models/
-│   │   ├── assets/
-│   │   └── environments/
-│   ├── package.json
-│   └── angular.json
-│
-└── README.md
+│   │   │   ├── app.component.ts    # Standalone Angular component
+│   │   │   ├── app.component.html  # Template
+│   │   │   ├── app.component.scss  # Styles
+│   │   │   └── socket.service.ts   # WebSocket service
+│   │   └── main.ts                 # Bootstrap file
+│   └── package.json                # Frontend dependencies
+└── README.md                       # This file
 ```
 
-## Environment Variables
+## Design Decisions and Patterns
 
-### Backend (.env)
-```env
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/todolist
-WS_PORT=8080
+### Backend
+
+- **Technology:** Node.js with Express.js, Socket.IO, and Mongoose  
+  - **Why?** Socket.IO enables real-time bidirectional communication, and Mongoose provides a schema-based interface to MongoDB for structured data management.
+
+- **Data Storage:** MongoDB (tasks collection in `todo_app` database)  
+  - **Why?** Ensures persistent storage, with Mongoose enforcing a schema for tasks (title and completed status).
+
+- **Environment Variables:** Managed with `dotenv`  
+  - **Why?** Keeps sensitive configuration (e.g., MongoDB URI) secure and configurable per environment.
+
+- **Edit Locking:** Implemented using a Map (`editingLocks`)  
+  - **Why?** Prevents concurrent edits by associating task `_id`s with client socket IDs. Locks are released on save, cancel, or client disconnect.
+
+### Frontend
+
+- **Framework:** Angular (Standalone Component)  
+  - **Why?** Standalone components simplify dependency management and reduce boilerplate, leveraging Angular’s reactive capabilities.
+
+- **UI Library:** Angular Material  
+  - **Why?** Provides a polished, consistent UI with components like lists, inputs, and checkboxes, minimizing custom styling.
+
+- **Real-Time Updates:** Socket.IO client with RxJS Observables  
+  - **Why?** Observables integrate seamlessly with Angular’s reactive paradigm, enabling automatic UI updates on WebSocket events.
+
+### Patterns
+
+- **Event-Driven Architecture:** WebSocket events (e.g., `tasksUpdated`, `taskLocked`) drive communication between server and clients.  
+  - **Benefit:** Enables real-time responsiveness and decouples components.
+
+- **Service Layer:** `SocketService` encapsulates WebSocket logic.  
+  - **Benefit:** Promotes reusability and keeps the component focused on UI logic.
+
+- **Reactive Programming:** RxJS Observables handle asynchronous WebSocket events.  
+  - **Benefit:** Simplifies state management and UI updates.
+
+- **Single Source of Truth:** MongoDB (via Mongoose) maintains the canonical task list, synchronized across clients.  
+  - **Benefit:** Ensures data consistency without complex reconciliation.
+
+
+
+## Trade-Offs
+
+- **Mongoose Overhead:** Adds complexity over raw MongoDB but improves data validation and maintainability.
+- **No Authentication:** Omitted for simplicity; a production app would require user management.
+- **In-Memory Locks:** Locks are stored in memory and lost on server restart; a persistent solution could be added for robustness.
+
+## Future Improvements
+
+- Add user authentication and task ownership.
+- Persist edit locks in MongoDB for server restart resilience.
+- Enhance the UI with features like drag-and-drop reordering or task categories.
+- Implement error handling for network or database failures.
+
+## Notes
+
+Add `.env` to `.gitignore` to avoid committing sensitive data:
+
+```
+# backend/.gitignore
+.env
 ```
 
-### Frontend (environment.ts)
-```typescript
-export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3000/api',
-  wsUrl: 'ws://localhost:8080'
-};
-```
-
-## Verification Steps
-
-After setup, verify the following:
-
-1. Backend Status
-   ```bash
-   # Backend server should show:
-   Server running on port 3000
-   WebSocket server running on port 8080
-   MongoDB connected successfully
-   ```
-
-2. Frontend Status
-   ```bash
-   # Angular server should show:
-   √ Compiled successfully.
-   ```
-
-3. Browser Console
-   - No error messages
-   - WebSocket connection established
-
-4. Application Functionality
-   - Create a todo item
-   - Edit a todo item
-   - Delete a todo item
-   - Mark a todo as complete
-   - Verify real-time updates in multiple browser windows
-
-## Support
-
-If you encounter any issues not covered in this guide:
-
-1. Check the project's issue tracker on GitHub
-2. Create a new issue with:
-   - Detailed description of the problem
-   - Steps to reproduce
-   - Environment information
-   - Error messages/screenshots
-
-## Additional Resources
-
-- [Angular Documentation](https://angular.io/docs)
-- [Node.js Documentation](https://nodejs.org/en/docs/)
-- [MongoDB Documentation](https://docs.mongodb.com/)
-- [WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
-
+The application now correctly handles task editing and locking, ensuring a smooth collaborative experience.
