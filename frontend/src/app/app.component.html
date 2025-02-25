@@ -1,0 +1,63 @@
+<mat-card appearance="outlined">
+  <div class="container">
+    <h1>Real-Time To-Do List</h1>
+
+    <mat-form-field appearance="fill">
+      <mat-label>New Task</mat-label>
+      <input matInput [(ngModel)]="newTaskTitle" (keyup.enter)="addTask()" />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="addTask()"
+        [disabled]="!newTaskTitle.trim()"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-list>
+      <mat-list-item *ngFor="let task of tasks">
+        <div *ngIf="!isEditing(task._id); else editTemplate" class="task-item">
+          <mat-checkbox
+            [checked]="task.completed"
+            (change)="toggleCompleted(task)"
+            [disabled]="isLocked(task._id)"
+          ></mat-checkbox>
+          <span [ngClass]="{ completed: task.completed }">{{
+            task.title
+          }}</span>
+          <button
+            mat-icon-button
+            (click)="startEditing(task)"
+            [disabled]="isLocked(task._id)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="deleteTask(task._id)"
+            [disabled]="isLocked(task._id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+
+        <ng-template #editTemplate>
+          <mat-form-field appearance="fill" class="edit-field">
+            <input
+              matInput
+              [(ngModel)]="editingTask.title"
+              (keyup.enter)="saveEdit()"
+            />
+            <button mat-icon-button matSuffix (click)="saveEdit()">
+              <mat-icon>save</mat-icon>
+            </button>
+            <button mat-icon-button matSuffix (click)="cancelEdit()">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-form-field>
+        </ng-template>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</mat-card>

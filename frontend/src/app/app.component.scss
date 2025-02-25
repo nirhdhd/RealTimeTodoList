@@ -1,0 +1,39 @@
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    color: #0077b6;
+  }
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.edit-field {
+  width: 100%;
+}
+
+mat-list-item {
+  margin-bottom: 10px;
+}
+
+.mat-mdc-card {
+  width: fit-content;
+  margin: auto;
+  margin-top: 100px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
